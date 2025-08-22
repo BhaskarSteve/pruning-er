@@ -1,23 +1,23 @@
-# sft.yaml  (fixed for single A40)
 base_model: Qwen/Qwen2.5-0.5B-Instruct
-trust_remote_code: true
+trust_remote_code: true 
 
 datasets:
-  - path: data/s1k-gemini_chatml.jsonl
+  - path: data/s1k-gemini_chatml.jsonl        # from the prep script you ran
     type: chat_template
-    chat_template: chatml
+    chat_template: chatml              # renders <|im_start|>{role} ... <|im_end|>
     field_messages: messages
+    # Train only on these roles (so the question/user text has no loss)
+    roles_to_train: ["think", "answer"]
 
-# Do NOT learn from the user turn
-train_on_inputs: false
+special_tokens:
+  eos_token: "<|im_end|>"
 
-# ==== Training schedule ====
+# ===== Training schedule =====
 num_train_epochs: 3
 
-# Use micro-batching; keep effective batch ~=16 like the paper
-micro_batch_size: 1            # fits A40 safely; try 2 if VRAM is comfy
-gradient_accumulation_steps: 16
-batch_size: 16                 # (derived; redundant but silences validator)
+micro_batch_size: 4            # per-GPU micro batch (safe on a single A40)
+gradient_accumulation_steps: 4
+# DO NOT set 'batch_size' when 'gradient_accumulation_steps' is present
 
 optimizer: adamw_hf
 learning_rate: 1.0e-5
@@ -30,16 +30,16 @@ warmup_ratio: 0.05
 
 bf16: true
 tf32: true
-gradient_checkpointing: true   # big memory saver
+gradient_checkpointing: true   # big VRAM saver
 
-# ==== Context length ====
-# 32k is great but usually OOM on a single A40. Start with 8k; if it fits, try 16k.
-sequence_len: 8192
+# ===== Context length =====
+# Start with 8k on an A40; bump to 16k if it fits.
+sequence_len: 32768
 sample_packing: false
 
-# Misc
+# ===== Logging / saving =====
 save_strategy: "epoch"
-evaluation_strategy: "none"
+evaluation_strategy: "no"      # not "none"
 logging_steps: 10
 seed: 42
 output_dir: outputs/qwen25-3b-s1k-sft
