@@ -15,8 +15,8 @@ special_tokens:
 # ===== Training schedule =====
 num_train_epochs: 3
 
-micro_batch_size: 4            # per-GPU micro batch (safe on a single A40)
-gradient_accumulation_steps: 4
+micro_batch_size: 1            # per-GPU micro batch (safe on a single A40)
+gradient_accumulation_steps: 16
 # DO NOT set 'batch_size' when 'gradient_accumulation_steps' is present
 
 optimizer: adamw_torch
@@ -34,7 +34,7 @@ gradient_checkpointing: true   # big VRAM saver
 
 # ===== Context length =====
 # Start with 8k on an A40; bump to 16k if it fits.
-sequence_len: 32768
+sequence_len: 8192
 sample_packing: false
 
 # ===== Logging / saving =====
