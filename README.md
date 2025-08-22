@@ -1,2 +1,1 @@
-# srm
-SFT Distillation for Small Reasoning Models
+# Small Reasoning Models

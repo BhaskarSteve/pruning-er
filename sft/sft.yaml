@@ -1,0 +1,59 @@
+# qwen25-3b-s1k-sft.yaml
+# Supervised FT, 1 epoch, same recipe as paper (except smaller base model).
+base_model: Qwen/Qwen2.5-3B-Instruct
+trust_remote_code: true
+
+# Use ChatML-style chat template; we'll feed roles: user/think/answer
+datasets:
+  - path: data/s1k_chatml.jsonl
+    type: chat_template
+    chat_template: chatml
+    field_messages: messages
+
+    # Map our roles for masking: treat think+answer as "assistant" so we compute loss there.
+    roles:
+      assistant:
+        - assistant
+        - think
+        - answer
+      user:
+        - user
+
+    # Train only on "assistant" (i.e., think + answer) turns; no loss on the question.
+    roles_to_train: ["assistant"]
+    train_on_eos: "turn"
+
+# Make sure EOS matches ChatML closing token
+special_tokens:
+  eos_token: "<|im_end|>"
+
+# === Training schedule (paper’s knobs) ===
+num_train_epochs: 5
+per_device_train_batch_size: 8
+gradient_accumulation_steps: 1
+
+optimizer: adamw_hf
+learning_rate: 1.0e-5
+weight_decay: 1.0e-4
+adam_beta1: 0.9
+adam_beta2: 0.95
+
+lr_scheduler_type: cosine
+warmup_ratio: 0.05  # 5% warmup then cosine to 0
+
+bf16: true
+tf32: true
+
+# === Context length ===
+# Paper shows short seq len hurts; use the longest feasible to avoid truncation.
+# Qwen2.5-3B supports long contexts; adjust down if you OOM.
+sequence_len: 32768
+sample_packing: false
+
+# Misc
+save_steps: 0
+save_strategy: "epoch"
+evaluation_strategy: "no"
+logging_steps: 10
+seed: 42
+output_dir: outputs/qwen25-3b-s1k-sft

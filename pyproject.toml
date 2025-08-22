@@ -11,4 +11,5 @@ dependencies = [
     "torch>=2.0.0",
     "transformers>=4.45.0",
     "accelerate>=0.25.0",
+    "axolotl>=0.12.2",
 ]
