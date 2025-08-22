@@ -19,7 +19,7 @@ micro_batch_size: 4            # per-GPU micro batch (safe on a single A40)
 gradient_accumulation_steps: 4
 # DO NOT set 'batch_size' when 'gradient_accumulation_steps' is present
 
-optimizer: adamw_hf
+optimizer: adamw_torch
 learning_rate: 1.0e-5
 weight_decay: 1.0e-4
 adam_beta1: 0.9
@@ -39,7 +39,7 @@ sample_packing: false
 
 # ===== Logging / saving =====
 save_strategy: "epoch"
-evaluation_strategy: "no"      # not "none"
+eval_strategy: "no"      # not "none"
 logging_steps: 10
 seed: 42
 output_dir: outputs/qwen25-3b-s1k-sft
