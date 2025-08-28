@@ -5,5 +5,5 @@ MODEL_ARGS='model_name=google/gemma-3-1b-it,dtype=bfloat16,use_chat_template=tru
 
 # Evaluate MATH-500 (0-shot). Output to a folder and also write per-item details.
 lighteval vllm "$MODEL_ARGS" "lighteval|math500|0|0" \
-  --output-dir runs/gemma3-4b-it-math500 \
+  --output-dir runs/gemma3-1b-it-math500 \
   --save-details
