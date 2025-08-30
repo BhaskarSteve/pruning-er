@@ -14,4 +14,6 @@ msg = resp.choices[0].message
 print("--- reasoning ---")
 print(getattr(msg, "reasoning_content", None))
 print("--- final ---")
-print(msg.content)
+print(getattr(msg, "content", None))
+print("---")
+print("---")
