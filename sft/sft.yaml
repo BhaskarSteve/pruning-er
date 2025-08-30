@@ -2,7 +2,7 @@ base_model: Qwen/Qwen2.5-0.5B-Instruct
 trust_remote_code: true 
 
 datasets:
-  - path: data/s1k-gemini_chatml.jsonl        # from the prep script you ran
+  - path: data/s1k-gemini.jsonl        # from the prep script you ran
     type: chat_template
     chat_template: chatml              # renders <|im_start|>{role} ... <|im_end|>
     field_messages: messages

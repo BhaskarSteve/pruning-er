@@ -1,4 +1,5 @@
-*.jsonl
+# *.jsonl
 models
 .venv
 AGENTS.md
+.vscode
