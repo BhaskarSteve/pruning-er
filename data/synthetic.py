@@ -11,9 +11,10 @@ resp = client.chat.completions.create(
 )
 
 msg = resp.choices[0].message
-print("--- reasoning ---")
-print(getattr(msg, "reasoning_content", None))
-print("--- final ---")
-print(getattr(msg, "content", None))
-print("---")
-print("---")
+print(msg)
+# print("--- reasoning ---")
+# print(getattr(msg, "reasoning_content", None))
+# print("--- final ---")
+# print(getattr(msg, "content", None))
+# print("---")
+# print("---")
